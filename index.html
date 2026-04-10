@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aaron · Solution Engineer</title>
+
+  <!-- ── SEO & Open Graph ── -->
+  <title>Aaron Davis · Solution Engineer · Cisco Systems</title>
+  <meta name="description" content="Aaron Davis — Solution Engineer at Cisco Systems. Enterprise networking, security, and AI at scale. CCNP certified. Based in Colorado."/>
+  <meta property="og:title" content="Aaron Davis · Solution Engineer"/>
+  <meta property="og:description" content="Enterprise networking, security, and AI at scale. CCNP certified. Cisco Systems · Colorado."/>
+  <meta property="og:url" content="https://dirflash.github.io"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:site" content="@dirflash"/>
+  <meta name="twitter:title" content="Aaron Davis · Solution Engineer"/>
+  <meta name="twitter:description" content="Enterprise networking, security, and AI at scale. CCNP certified. Cisco Systems · Colorado."/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --black:      #0A0A0A;
@@ -64,6 +77,7 @@
       font-weight: 400;
       letter-spacing: 0.06em;
       color: var(--amber);
+      text-decoration: none;
     }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a {
@@ -73,8 +87,65 @@
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
+      position: relative;
+      padding-bottom: 2px;
     }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width 0.25s;
+    }
+    .nav-links a.active { color: var(--cream); }
+    .nav-links a.active::after { width: 100%; }
     .nav-links a:hover { color: var(--cream); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--amber);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.97);
+      z-index: 99;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .mobile-nav a:hover { color: var(--amber); }
 
     /* ── HERO ── */
     #hero {
@@ -87,7 +158,7 @@
       z-index: 1;
     }
 
-    /* Rotating rings — watch/compass motif */
+    /* Rotating rings */
     .ring-wrap {
       position: absolute;
       right: -10vw;
@@ -108,31 +179,16 @@
       animation: spin linear infinite;
     }
     .ring:nth-child(1) { animation-duration: 50s; }
-    .ring:nth-child(2) {
-      inset: 8%;
-      animation-duration: 35s;
-      animation-direction: reverse;
-    }
-    .ring:nth-child(3) {
-      inset: 20%;
-      border-color: rgba(201,146,42,0.22);
-      animation-duration: 22s;
-    }
-    .ring:nth-child(4) {
-      inset: 33%;
-      border: 1.5px solid rgba(201,146,42,0.45);
-      animation-duration: 65s;
-      animation-direction: reverse;
-    }
+    .ring:nth-child(2) { inset: 8%; animation-duration: 35s; animation-direction: reverse; }
+    .ring:nth-child(3) { inset: 20%; border-color: rgba(201,146,42,0.22); animation-duration: 22s; }
+    .ring:nth-child(4) { inset: 33%; border: 1.5px solid rgba(201,146,42,0.45); animation-duration: 65s; animation-direction: reverse; }
 
-    /* Tick marks on outer ring */
     .ring:nth-child(1)::before,
     .ring:nth-child(1)::after {
       content: '';
       position: absolute;
       left: 50%;
-      width: 1px;
-      height: 14px;
+      width: 1px; height: 14px;
       background: var(--amber);
       transform: translateX(-50%);
     }
@@ -166,7 +222,6 @@
       opacity: 0;
       animation: fadeUp 0.8s 0.25s forwards;
     }
-
     .hero-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(3.8rem, 8.5vw, 7.5rem);
@@ -178,10 +233,7 @@
       opacity: 0;
       animation: fadeUp 0.8s 0.45s forwards;
     }
-    .hero-name em {
-      font-style: italic;
-      color: var(--amber);
-    }
+    .hero-name em { font-style: italic; color: var(--amber); }
 
     .hero-desc {
       font-size: 0.78rem;
@@ -203,6 +255,45 @@
       animation: fadeUp 0.8s 0.85s forwards;
     }
 
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.4s forwards;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--amber-dim);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--amber);
+      animation: scanline 2s ease-in-out infinite;
+    }
+    @keyframes scanline {
+      0%   { left: -100%; }
+      50%  { left: 0%; }
+      100% { left: 100%; }
+    }
+
+    /* ── BUTTONS ── */
     .btn {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.62rem;
@@ -216,10 +307,7 @@
       cursor: pointer;
     }
     .btn:hover { background: var(--amber); color: var(--black); }
-    .btn-ghost {
-      border-color: var(--border);
-      color: var(--muted);
-    }
+    .btn-ghost { border-color: var(--border); color: var(--muted); }
     .btn-ghost:hover { background: transparent; border-color: var(--cream); color: var(--cream); }
 
     @keyframes fadeUp {
@@ -231,13 +319,27 @@
       to   { opacity: 1; }
     }
 
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
     /* ── SECTIONS ── */
     section {
       position: relative;
       z-index: 1;
       padding: 7rem 3rem;
     }
-
     .section-label {
       font-size: 0.62rem;
       letter-spacing: 0.26em;
@@ -251,8 +353,7 @@
     .section-label::after {
       content: '';
       display: block;
-      height: 1px;
-      width: 56px;
+      height: 1px; width: 56px;
       background: var(--amber-dim);
     }
 
@@ -265,7 +366,6 @@
       gap: 5rem;
       max-width: 980px;
     }
-
     .about-heading {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2rem, 4vw, 3.4rem);
@@ -283,6 +383,24 @@
     }
     .about-body p + p { margin-top: 1.25rem; }
 
+    /* Cert callout */
+    .cert-callout {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid var(--border);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .cert-callout::before {
+      content: '◈';
+      font-size: 0.8rem;
+    }
+
     /* ── DOMAINS ── */
     #domains { border-top: 1px solid var(--border); }
 
@@ -292,7 +410,6 @@
       border: 1px solid var(--border);
       max-width: 980px;
     }
-
     .domain-card {
       padding: 2.5rem 2rem;
       border-right: 1px solid var(--border);
@@ -309,7 +426,6 @@
       color: var(--amber-dim);
       margin-bottom: 1.25rem;
     }
-
     .domain-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.45rem;
@@ -318,27 +434,24 @@
       margin-bottom: 0.75rem;
       line-height: 1.2;
     }
-
     .domain-body {
       font-size: 0.7rem;
       line-height: 1.8;
       color: var(--muted);
     }
 
-    /* ── SIGNAL (interests) ── */
+    /* ── SIGNAL ── */
     #signal {
       border-top: 1px solid var(--border);
       padding-top: 4.5rem;
       padding-bottom: 4.5rem;
     }
-
     .signal-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.6rem;
       max-width: 980px;
     }
-
     .tag {
       font-size: 0.6rem;
       letter-spacing: 0.18em;
@@ -361,11 +474,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    footer p {
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-    }
+    footer p { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; }
     .footer-links { display: flex; gap: 1.75rem; list-style: none; }
     .footer-links a {
       font-size: 0.62rem;
@@ -380,8 +489,10 @@
     @media (max-width: 768px) {
       nav { padding: 1.2rem 1.5rem; }
       .nav-links { display: none; }
+      .hamburger { display: flex; }
       #hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
       .ring-wrap { display: none; }
+      .scroll-cue { left: 1.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
     }
@@ -389,13 +500,23 @@
 </head>
 <body>
 
+  <!-- Mobile nav drawer -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#about"   onclick="closeMenu()">About</a>
+    <a href="#domains" onclick="closeMenu()">Work</a>
+    <a href="#signal"  onclick="closeMenu()">Signal</a>
+  </div>
+
   <nav id="main-nav">
-    <span class="nav-mark">A.D.</span>
+    <a href="#hero" class="nav-mark">A.D.</a>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#domains">Work</a></li>
-      <li><a href="#signal">Signal</a></li>
+      <li><a href="#about"   data-section="about">About</a></li>
+      <li><a href="#domains" data-section="domains">Work</a></li>
+      <li><a href="#signal"  data-section="signal">Signal</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ── HERO ── -->
@@ -416,23 +537,27 @@
         CCNP certified. Thinking hard about where intelligent networks go next.
       </p>
       <div class="hero-actions">
-        <!-- TODO: Replace with your LinkedIn URL -->
         <a href="https://www.linkedin.com/in/aaronedavis/" class="btn" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="mailto:dirflash@dirflash.com" class="btn btn-ghost">Contact</a>
       </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
   <!-- ── ABOUT ── -->
   <section id="about">
-    <p class="section-label">01 — About</p>
+    <p class="section-label reveal">01 — About</p>
     <div class="about-grid">
-      <h2 class="about-heading">
+      <h2 class="about-heading reveal reveal-delay-1">
         Bridging the gap between<br/>
         <em>what networks can do</em><br/>
         and what they should.
       </h2>
-      <div class="about-body">
+      <div class="about-body reveal reveal-delay-2">
         <p>
           I'm a Solution Engineer at Cisco Systems based in Colorado, working with enterprise clients to design, secure, and evolve their network infrastructure — from campus fabric to SD-WAN edge to AI-assisted operations.
         </p>
@@ -442,30 +567,31 @@
         <p>
           Currently thinking hard about how AI will reshape the way networks are designed, operated, and understood — and what that means for the engineers building them.
         </p>
+        <div class="cert-callout">Cisco CCNP Enterprise</div>
       </div>
     </div>
   </section>
 
   <!-- ── DOMAINS ── -->
   <section id="domains">
-    <p class="section-label">02 — Domains</p>
+    <p class="section-label reveal">02 — Domains</p>
     <div class="domains-grid">
-      <div class="domain-card">
+      <div class="domain-card reveal reveal-delay-1">
         <p class="domain-num">001</p>
         <h3 class="domain-title">Enterprise Networking</h3>
         <p class="domain-body">Catalyst 9000, SD-Access, SD-WAN (Viptela). Campus-to-cloud architectures built for resilience and scale.</p>
       </div>
-      <div class="domain-card">
+      <div class="domain-card reveal reveal-delay-2">
         <p class="domain-num">002</p>
         <h3 class="domain-title">Security</h3>
         <p class="domain-body">Cisco Umbrella, zero-trust frameworks, DNS-layer intelligence. Security that works with the network, not against it.</p>
       </div>
-      <div class="domain-card">
+      <div class="domain-card reveal reveal-delay-3">
         <p class="domain-num">003</p>
         <h3 class="domain-title">AI & Observability</h3>
         <p class="domain-body">ThousandEyes, Cisco AI Network Analytics, Meraki. Turning telemetry into decisions before problems become outages.</p>
       </div>
-      <div class="domain-card">
+      <div class="domain-card reveal reveal-delay-4">
         <p class="domain-num">004</p>
         <h3 class="domain-title">Solution Engineering</h3>
         <p class="domain-body">Translating complex technical capability into business value. From whiteboard to proof-of-concept to close.</p>
@@ -475,8 +601,8 @@
 
   <!-- ── SIGNAL ── -->
   <section id="signal">
-    <p class="section-label">03 — Signal</p>
-    <div class="signal-row">
+    <p class="section-label reveal">03 — Signal</p>
+    <div class="signal-row reveal reveal-delay-1">
       <span class="tag">CCNP Enterprise</span>
       <span class="tag">SD-WAN</span>
       <span class="tag">SD-Access</span>
@@ -485,6 +611,7 @@
       <span class="tag">ThousandEyes</span>
       <span class="tag">AI Operations</span>
       <span class="tag">Meraki</span>
+      <span class="tag">Python</span>
       <span class="tag">Mechanical Watches</span>
       <span class="tag">Fine Pens</span>
       <span class="tag">Bourbon</span>
@@ -499,13 +626,66 @@
   <footer>
     <p>© 2026 Aaron Davis · Arvada, CO</p>
     <ul class="footer-links">
-      <!-- TODO: Replace with your handles -->
       <li><a href="https://www.linkedin.com/in/aaronedavis/" target="_blank" rel="noopener">LinkedIn</a></li>
-      <li><a href="https://github.com/aarodavi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://twitter.com/dirflash" target="_blank" rel="noopener">X / Twitter</a></li>
+      <li><a href="https://github.com/dirflash" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // Sticky nav highlight on scroll
+  <script>
+    // ── Sticky nav ──
     const nav = document.getElementById('main-nav');
-    window.addEven
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Active nav indicator ──
+    const sections = ['about', 'domains', 'signal'];
+    const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.dataset.section === entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+
+    // ── Scroll reveal ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    function closeMenu() {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+
+</body>
+</html>
